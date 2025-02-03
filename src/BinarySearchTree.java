@@ -40,10 +40,9 @@ public class BinarySearchTree
 
     // value is equal
     if (node.value == parent.value) {
-      System.out.printf("values of node and parent equal, added inbetween\n", node.value, parent.value);
+      System.out.print("values of node and parent equal, added inbetween\n");
       node.left = parent.left;
       parent.left = node;
-      return;
     }
   }
 
@@ -53,6 +52,17 @@ public class BinarySearchTree
   {
     // create a node to add
     TreeNode node = new TreeNode(value);
+
+    // add a node
+    add(node);
+  }
+
+  /*------------------------------------------------------------------------------------------------------------------*/
+
+  public void add(TreeNode node)
+  {
+    if (node == null)
+      return;
 
     // if list is empty, add to root
     if (root == null) {
@@ -66,23 +76,92 @@ public class BinarySearchTree
 
   /*------------------------------------------------------------------------------------------------------------------*/
 
+  private void popRecursively (int value, TreeNode parent)
+  {
+    if (parent == null)
+      return;
+
+    if (parent.left != null && parent.left.value == value) {
+      TreeNode tmp = parent.left;
+      parent.left = parent.left.left;
+      add(tmp.right);
+      tmp.discard();
+      return;
+    }
+
+    if (parent.right != null && parent.right.value == value) {
+      TreeNode tmp = parent.right;
+      parent.right = parent.right.left;
+      add(tmp.right);
+      tmp.discard();
+      return;
+    }
+
+    popRecursively(value, parent.right);
+    popRecursively(value, parent.left);
+  }
+
+  /*------------------------------------------------------------------------------------------------------------------*/
+
   public void pop (int value)
   {
+    // tree is empty
+    if (root == null) {
+      System.out.print("The tree is empty already.\n");
+      return;
+    }
 
+    // tree does not contain the value
+    if (!this.contains(value)) {
+      System.out.printf("This tree does not contain %d,\n-> no reason to pop.\n", value);
+      return;
+    }
+
+    // popping the root
+    if (root.value == value) {
+      TreeNode tmp = root;
+      root = root.left;
+      add(tmp.right);
+      tmp.discard();
+      return;
+    }
+
+    popRecursively(value, root);
   }
 
   /*------------------------------------------------------------------------------------------------------------------*/
 
   public int get (int value)
   {
-    return 0;
+    if (this.contains(value))
+      return value;
+    else {
+      System.out.printf("This tree does not contain the value of %d\n", value);
+      return -1;
+    }
+  }
+
+  /*------------------------------------------------------------------------------------------------------------------*/
+
+  private boolean containsRecursively (TreeNode parent, int value)
+  {
+    if (parent == null)
+      return false;
+
+    if (parent.value == value)
+      return true;
+
+    return containsRecursively(parent.left, value) || containsRecursively(parent.right, value);
   }
 
   /*------------------------------------------------------------------------------------------------------------------*/
 
   public boolean contains (int value)
   {
-    return false;
+    if (root == null)
+      return false;
+
+    return containsRecursively(root, value);
   }
 
   /*------------------------------------------------------------------------------------------------------------------*/
@@ -113,22 +192,25 @@ public class BinarySearchTree
 
   public void printOrdered ()
   {
-    System.out.printf("printing binary tree...\n");
+    System.out.print("printing binary tree...\n");
     if (root == null) {
-      System.out.printf("This tree is empty.\n");
+      System.out.print("This tree is empty.\n");
       return;
     }
 
     printOrderedRecursively(root);
-    System.out.printf("\n");
-
+    System.out.print("\n");
   }
 
   /*------------------------------------------------------------------------------------------------------------------*/
 
-  public void printByLayers ()
+  public void printRecursively (TreeNode parent)
   {
-
+    System.out.println(parent.toString());
+    if (parent.left != null)
+      printRecursively(parent.left);
+    if (parent.right != null)
+      printRecursively(parent.right);
   }
 }
 
