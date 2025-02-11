@@ -166,39 +166,19 @@ public class BinarySearchTree
 
   /*------------------------------------------------------------------------------------------------------------------*/
 
-  private void printOrderedRecursively (TreeNode parent)
-  {
-    // print left branch first - contains lower values
-    if (parent.left == null) {
-      // is at bottom of the chain
-      System.out.printf("%d ", parent.value);
-      if (parent.right != null)
-        printOrderedRecursively(parent.right);
-      return;
-    } else {
-      // continue to the bottom
-      printOrderedRecursively(parent.left);
-    }
 
-    // print yourself
-    System.out.printf("%d ", parent.value);
-
-    // print higher values to the right
-    if (parent.right != null)
-      printOrderedRecursively(parent.right);
-  }
-
-  /*------------------------------------------------------------------------------------------------------------------*/
-
-  public void printOrdered ()
+  public void print ()
   {
     System.out.print("printing binary tree...\n");
+
+    // tree is empty
     if (root == null) {
       System.out.print("This tree is empty.\n");
       return;
     }
 
-    printOrderedRecursively(root);
+    // tree is not empty
+    printRecursively(root);
     System.out.print("\n");
   }
 
@@ -206,12 +186,18 @@ public class BinarySearchTree
 
   public void printRecursively (TreeNode parent)
   {
-    System.out.println(parent.toString());
-    if (parent.left != null)
+    // print left branch -> always contains the smallest of values
+    if (parent.left != null) {
       printRecursively(parent.left);
+    }
+
+    // print itself (after no left branches reamin)
+    System.out.println(parent);
+
+    // print right branch -> always contains higher values
     if (parent.right != null)
       printRecursively(parent.right);
   }
 }
 
-/*====================================================================================================================*/
+/*====================================================================================================úterý ve tři================*/
